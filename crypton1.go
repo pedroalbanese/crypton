@@ -5,7 +5,7 @@ import (
     "sync"
     "crypto/cipher"
 
-    "crypto/subtle"
+    "github.com/pedroalbanese/crypton/internal/subtle"
 )
 
 const BlockSize = 16
