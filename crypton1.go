@@ -4,6 +4,8 @@ import (
     "fmt"
     "sync"
     "crypto/cipher"
+
+    "crypto/subtle"
 )
 
 const BlockSize = 16
@@ -55,6 +57,10 @@ func (this *crypton1Cipher) Encrypt(dst, src []byte) {
         panic("cryptobin/crypton1: output not full block")
     }
 
+    if subtle.InexactOverlap(dst[:BlockSize], src[:BlockSize]) {
+        panic("cryptobin/crypton1: invalid buffer overlap")
+    }
+
     encSrc := bytesToUint32s(src)
     encDst := make([]uint32, len(encSrc))
 
@@ -71,6 +77,10 @@ func (this *crypton1Cipher) Decrypt(dst, src []byte) {
 
     if len(dst) < BlockSize {
         panic("cryptobin/crypton1: output not full block")
+    }
+
+    if subtle.InexactOverlap(dst[:BlockSize], src[:BlockSize]) {
+        panic("cryptobin/crypton1: invalid buffer overlap")
     }
 
     encSrc := bytesToUint32s(src)
